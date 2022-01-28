@@ -28,8 +28,24 @@ Route::get('/subscribe', function () {
 Route::post('/subscribe', function () {
     auth()->user()->newSubscription(
         'default', request()->plan
-    )->create(request()->payment_method);
+    )->create(request()->paymentMethodId);
 })->name('subscribe.post');
+
+
+Route::get('/singlecharge', function () {
+    return view('singlecharge',[
+        'intent' => auth()->user()->createSetupIntent()
+    ]);
+})->name('singlecharge');
+
+
+
+Route::post('/singlecharge', function () {
+   $charge=auth()->user()->charge(100,request()->paymentMethodId);
+
+
+
+})->name('singlecharge.post');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
