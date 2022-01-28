@@ -17,6 +17,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/subscribe', function () {
+    return view('subscribe',[
+        'intent' => auth()->user()->createSetupIntent()
+    ]);
+})->name('subscribe');
+
+
+
+Route::post('/subscribe', function () {
+    auth()->user()->newSubscription(
+        'default', request()->plan
+    )->create(request()->payment_method);
+})->name('subscribe.post');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
